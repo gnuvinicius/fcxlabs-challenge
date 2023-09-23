@@ -1,19 +1,19 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 
 WORKDIR /src
 
-COPY Security.csproj .
+COPY FCxLabs-Challenge/FCXL-Api/FCXL-Api.csproj .
 
-RUN dotnet restore "Security.csproj"
+RUN dotnet restore "FCXL-Api.csproj"
 
 COPY . .
 
-RUN dotnet publish "Security.csproj" -c Debug -o /publish
+RUN dotnet publish "FCXL-Api.csproj" -c Debug -o /publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final
 
 WORKDIR /app
 
 COPY --from=build /publish .
 
-ENTRYPOINT ["dotnet", "Security.dll"]
+ENTRYPOINT ["dotnet", "FCXL-Api.dll"]
