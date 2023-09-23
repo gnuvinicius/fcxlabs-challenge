@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>FCxLabs.Api</RootNamespace>
+    <UserSecretsId>a1935be5-679e-433f-9eec-fb72b3899dc2</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
