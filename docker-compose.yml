@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: fcxlabs_db_dev
+    environment:
+      POSTGRES_DB: "fcxlabs_db"
+      POSTGRES_USER: "fcxlabs_db_dev"
+      POSTGRES_PASSWORD: "Password"
+      ALLOW_EMPTY_PASSWORD: "no"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "root@fcxlabs.dev"
+      PGADMIN_DEFAULT_PASSWORD: "Password"
+    ports:
+      - "16543:80"
+    depends_on:
+      - db
+
+volumes:
+  postgresql_data:
