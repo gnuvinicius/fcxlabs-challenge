@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 
 WORKDIR /src
 
-COPY FCXL-Api.csproj .
+COPY ./FCXL-Api.csproj .
 
 RUN dotnet restore "FCXL-Api.csproj"
 
