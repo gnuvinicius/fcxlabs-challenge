@@ -2,30 +2,54 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     display: flex;
-    height: 100%;
-    justify-content: center;
     flex-direction: column;
-    background-color: rgb(158,160,246);
+    padding: 30px 40px 0 40px;
+    
+    .p-card {
+        margin-bottom: 20px;
+
+        .p-card-content {
+            width: 100%;
+            padding: 0;
+        }
+
+        input {
+            width: 95%;
+            margin-bottom: 20px;
+        }
+
+        .p-dropdown {
+            width: 95%;
+        }
+
+        button {
+            margin-right: 10px;
+        }
+
+        p {
+            margin: 0;
+        }
+    }
 `;
 
-export const Content = styled.div`
+export const FilterField = styled.div`
     display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    align-items: center;
-    justify-content: center;
+    
 `;
 
 export const Control = styled.div`
     display: flex;
     justify-content: flex-end;
     width: 100%;
-    margin-top: 10px;
     margin-bottom: 20px;
-    //border: 1px solid black;
-`
+
+    .p-button {
+        margin-left: 10px;
+    }
+`;
 
 export const DatatableArea = styled.div`
-    margin-left: 40px;
-    width: 80%;
-`
+    .p-datatable-wrapper {
+        font-size: 14px;
+    }
+`;
