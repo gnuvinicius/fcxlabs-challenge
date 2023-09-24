@@ -2,14 +2,16 @@
 {
     public class Pagination
     {
-        public int Page { get; private set; }
+        public int First { get; private set; }
         public int PerPage { get; private set; }
+        public int Size { get; private set; }
         public List<UserResponseDto> Result { get; private set; }
 
-        public Pagination(int page, int perPage, List<UserResponseDto> result)
+        public Pagination(int first, int perPage, int size, List<UserResponseDto> result)
         {
-            this.Page = page;
+            this.First = first;
             this.PerPage = perPage;
+            this.Size = size;
             this.Result = result;
         }
     }

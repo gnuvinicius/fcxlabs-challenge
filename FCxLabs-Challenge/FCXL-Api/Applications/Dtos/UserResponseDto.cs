@@ -12,7 +12,7 @@ namespace FCxLabs.Api.Applications.Dtos
         public string CPF { get; set; } = string.Empty;
         public DateTime Birtday { get; set; }
         public string MotherName { get; set; } = string.Empty;
-        public Status Status { get; set; }
+        public string Status { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

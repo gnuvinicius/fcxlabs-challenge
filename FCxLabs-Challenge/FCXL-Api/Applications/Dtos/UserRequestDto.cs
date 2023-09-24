@@ -1,6 +1,4 @@
-﻿using FCxLabs.Api.Domains;
-
-namespace FCxLabs.Api.Applications.Dtos;
+﻿namespace FCxLabs.Api.Applications.Dtos;
 
 public class UserRequestDto
 {
@@ -12,5 +10,4 @@ public class UserRequestDto
     public string CPF { get; set; } = string.Empty;
     public DateTime Birtday { get; set; }
     public string MotherName { get; set; } = string.Empty;
-    public Status Status { get; set; }
 }

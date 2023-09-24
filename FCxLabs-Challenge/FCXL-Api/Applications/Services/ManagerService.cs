@@ -27,10 +27,11 @@ namespace FCxLabs.Api.Applications.Services
 
         public async Task<Pagination> GetAllUsers(FilterRequestDto filter)
         {
-            List<User> users = await _repository.GetAllUsers(filter);
+            List<User> users = await _repository.GetAllUsersByFIlter(filter);
+            int size = _repository.GetSizeAllUsersByFilter(filter);
             var result = _mapper.Map<List<UserResponseDto>>(users);
 
-            return new Pagination(filter.Page, filter.PerPage, result);
+            return new Pagination(filter.First, filter.PerPage, size, result);
         }
 
         public async Task UpdateUserById(int id, UserUpdateRequestDto userDto)

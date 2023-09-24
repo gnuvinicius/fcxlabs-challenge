@@ -9,7 +9,8 @@ namespace FCxLabs.Api.Domains
         Task DeleteUserById(int id);
         Task<User?> FindById(int id);
         Task<User?> FindByUsername(string username);
-        Task<List<User>> GetAllUsers(FilterRequestDto filter);
+        Task<List<User>> GetAllUsersByFIlter(FilterRequestDto filter);
+        int GetSizeAllUsersByFilter(FilterRequestDto filter);
         Task UpdateUser(User user);
     }
 }

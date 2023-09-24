@@ -48,18 +48,16 @@ namespace FCxLabs.Api.Data
                     .FirstOrDefaultAsync();
         }
 
-        public async Task<List<User>> GetAllUsers(FilterRequestDto filter)
+        public int GetSizeAllUsersByFilter(FilterRequestDto filter)
         {
-            var query = _context.Users.AsQueryable();
+            IQueryable<User> query = BuildQueryByFilter(filter);
 
-            AddNameToFilter(filter, ref query);
-            AddCPFToFilter(filter, ref query);
-            AddUsernameToFilter(filter, ref query);
-            AddStatusToFilter(filter, ref query);
-            AddBirtdayToFilter(filter, ref query);
-            AddCreatedAtToFilter(filter, ref query);
-            AddUpdatedAtToFilter(filter, ref query);
-            AddRangeAgeToFilter(filter, ref query);
+            return query.Count();
+        }
+
+        public async Task<List<User>> GetAllUsersByFIlter(FilterRequestDto filter)
+        {
+            IQueryable<User> query = BuildQueryByFilter(filter);
 
             AddPagination(filter, ref query);
 
@@ -79,9 +77,24 @@ namespace FCxLabs.Api.Data
 
         #region PRIVATE METHODS
 
+        private IQueryable<User> BuildQueryByFilter(FilterRequestDto filter)
+        {
+            var query = _context.Users.AsQueryable();
+
+            AddNameToFilter(filter, ref query);
+            AddCPFToFilter(filter, ref query);
+            AddUsernameToFilter(filter, ref query);
+            AddStatusToFilter(filter, ref query);
+            AddBirtdayToFilter(filter, ref query);
+            AddCreatedAtToFilter(filter, ref query);
+            AddUpdatedAtToFilter(filter, ref query);
+            AddRangeAgeToFilter(filter, ref query);
+            return query;
+        }
+
         private static void AddPagination(FilterRequestDto filter, ref IQueryable<User> query)
         {
-            query = query.Skip(filter.Page - 1).Take(filter.PerPage);
+            query = query.Skip(filter.First - 1).Take(filter.PerPage);
         }
 
         private static void AddUsernameToFilter(FilterRequestDto filter, ref IQueryable<User> query)

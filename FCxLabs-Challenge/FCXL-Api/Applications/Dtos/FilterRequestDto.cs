@@ -12,7 +12,7 @@ namespace FCxLabs.Api.Applications.Dtos
         public DateTime? CreatedAt { get; set; } = null;
         public DateTime? UpdatedAt { get; set; } = null;
         public RangeDate? RangeDate { get; set; } = null;
-        public int Page { get; set; }
+        public int First { get; set; }
         public int PerPage { get; set; }
     }
 }
