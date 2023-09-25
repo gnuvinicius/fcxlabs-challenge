@@ -53,16 +53,12 @@ const FormModel = forwardRef((props, ref) => {
       const user = { name, username, password, email, phone, cpf, birtday, motherName };
       if (id) {
         updateById(id, user).then(response => {
-          if (response.status !== 200) {
-            console.log('mostrar mensagem de erro!')
-          }
+          props.refresh();
         })
       } else {
         createUser(user)
           .then(response => {
-            if (response.status !== 200) {
-              console.log('mostrar mensagem de erro!')
-            }
+            props.refresh();
           });
       }
     }

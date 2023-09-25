@@ -61,7 +61,7 @@ namespace FCxLabs.Api.Data
 
             AddPagination(filter, ref query);
 
-            query = query.OrderByDescending(x => x.CreatedAt);
+            query = query.OrderByDescending(x => x.UpdatedAt);
 
             return await query.ToListAsync();
         }

@@ -31,7 +31,7 @@ namespace FCxLabs.Api.Appliations.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserById(int id, UserUpdateRequestDto user)
+        public async Task<IActionResult> UpdateUserById(int id, [FromBody] UserUpdateRequestDto user)
         {
             await _service.UpdateUserById(id, user);
             return Ok();

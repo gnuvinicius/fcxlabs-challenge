@@ -15,7 +15,7 @@ export function createUser(userRequest) {
 }
 
 export function updateById(id, userRequest) {
-    return fetch(`${API_PATH}?id=${id}`, { method: 'PUT', body: JSON.stringify(userRequest), headers: headers })
+    return fetch(`${API_PATH}/${id}`, { method: 'PUT', body: JSON.stringify(userRequest), headers: headers })
 }
 
 export function inactiveUserById(id) {

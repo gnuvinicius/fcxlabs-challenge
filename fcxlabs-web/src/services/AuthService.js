@@ -13,10 +13,3 @@ export function login(username, password) {
 export function signup(userRequest) {
     return fetch(`${API_PATH}/signup`, { method: 'POST', body: JSON.stringify(userRequest), headers: headers })
 }
-
-export async function validToken(token) {
-    return true;
-    headers.append('Authorization', token)
-    return fetch(`${API_PATH}/valid-token`, { method: 'GET', headers: headers })
-        .then(response => response.status !== 200)
-}

@@ -44,19 +44,13 @@ export default function Main() {
 
     getAllByFilter(path)
       .then(response => {
-        if (response.status === 401) {
-          localStorage.removeItem('fcxlabs-token')
-          navigate('/')
-        } else {
-          response.json().then(data => {
-            setUsers(data.result);
-            setSize(data.size);
-            setLoading(false);
-          });
-        }
-      });
+        response.json().then(data => {
+          setUsers(data.result);
+          setSize(data.size);
+        })
+      })
+    setLoading(false);
   }
-
   const statusBodyTemplate = (rowData) => {
     return <Tag value={rowData.status} severity={getSeverity(rowData.status)} />;
   }
@@ -90,7 +84,7 @@ export default function Main() {
     getAllUserByFilter(e.first, filter);
   }
 
-  const filterUsers = (value) => {
+  const filterUsers = (first, value) => {
     setFilter(value)
     getAllUserByFilter(first, value);
   }
@@ -98,15 +92,20 @@ export default function Main() {
   const actionConfirmBlock = (confirm) => {
     setShowBlockDialog(false);
     if (confirm) {
-      blockerById(selectedUser.id).then(_ => getAllUserByFilter());
+      blockerById(selectedUser.id).then(_ => getAllUserByFilter(1, filter));
     }
   }
 
   const actionConfirmDelete = (confirm) => {
     setShowDeleteDialog(false);
     if (confirm) {
-      inactiveUserById(selectedUser.id).then(_ => getAllUserByFilter());
+      inactiveUserById(selectedUser.id).then(_ => getAllUserByFilter(1, filter));
     }
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('fcxlabs-token')
+    navigate('/')
   }
 
   return (
@@ -126,6 +125,9 @@ export default function Main() {
 
           <Button icon='pi pi-times' severity='danger' disabled={!selectedUser} tooltip='excluir'
             onClick={() => setShowDeleteDialog(true)} tooltipOptions={{ position: 'bottom' }} />
+
+          <Button icon='pi pi-sign-out' severity='secondary' outlined tooltip='sair'
+            onClick={() => handleLogout()} tooltipOptions={{ position: 'bottom' }} />
 
         </Control>
 
@@ -151,8 +153,11 @@ export default function Main() {
             template={{ layout: 'RowsPerPageDropdown CurrentPageReport PrevPageLink NextPageLink' }} />
         </DatatableArea>
       </Container>
-
-      <FormModel ref={ref} visible={showFormDialog} userToUpdate={selectedUser} hide={() => setShowFormDialog(false)} />
+      <FormModel ref={ref}
+        refresh={() => getAllUserByFilter(1, filter)}
+        visible={showFormDialog}
+        userToUpdate={selectedUser}
+        hide={() => setShowFormDialog(false)} />
 
       <ConfirmModel visible={showBlockDialog}
         action={actionConfirmBlock}

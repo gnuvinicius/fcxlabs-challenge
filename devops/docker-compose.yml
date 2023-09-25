@@ -22,6 +22,20 @@ services:
       - "16543:80"
     depends_on:
       - db
+  api:
+    build: ./api
+    ports:
+      - "5000:80"
+    depends_on:
+      - db
+  web:
+    build: ./web
+    ports:
+      - "80:3000"
+    environment:
+      - "API_URL=http://<ip-address>:5000"
+    depends_on:
+      - api
 
 volumes:
   postgresql_data:

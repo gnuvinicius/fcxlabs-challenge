@@ -11,10 +11,7 @@ export default function Filter(props) {
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState('');
   const [username, setUsername] = useState('');
-  const [birtday, setBirtday] = useState('');
-  const [createdAt, setCreatedAt] = useState('');
-  const [updatedAt, setUpdatedAt] = useState('');
-  const [rangeAge, setRangeAge] = useState('');
+
 
   const statusOptions = ['Inativo', 'Ativo', 'Bloqueado'];
 
@@ -35,8 +32,9 @@ export default function Filter(props) {
     filter = name ? filter.concat('', `&name=${name}`) : filter;
     filter = cpf ? filter.concat('', `&cpf=${cpf}`) : filter;
     filter = status ? filter.concat('', `&status=${statusToFilter.get(status)}`) : filter;
+    filter = username ? filter.concat('', `&username=${username}`) : filter;
 
-    props.filterUsers(filter);
+    props.filterUsers(1, filter);
   }
 
   const clearFilterForm = () => {
@@ -44,10 +42,7 @@ export default function Filter(props) {
     setCpf('');
     setUsername('');
     setStatus('');
-    setBirtday('');
-    setRangeAge('');
-    setCreatedAt('');
-    setUpdatedAt('');
+
   }
 
   return (
@@ -61,17 +56,10 @@ export default function Filter(props) {
               <InputText value={cpf} onChange={e => setCpf(e.target.value)} placeholder='cpf' />
             </div>
             <div>
-              <InputText value={username} onChange={e => setUsername(e.value)} placeholder='username' />
+              <InputText value={username} onChange={e => setUsername(e.target.value)} placeholder='username' />
               <Dropdown value={status} onChange={e => setStatus(e.value)} options={statusOptions} placeholder='status' />
             </div>
-            <div>
-              <InputText value={birtday} onChange={e => setBirtday(e.value)} type='date' placeholder='data de nascimento' />
-              <Dropdown value={rangeAge} onChange={e => setRangeAge(e.value)} options={rangeAgeOptions} placeholder='faixa etária' />
-            </div>
-            <div>
-              <InputText value={createdAt} onChange={e => setCreatedAt(e.value)} type='date' placeholder='criado em' />
-              <InputText value={updatedAt} onChange={e => setUpdatedAt(e.value)} type='date' placeholder='ultima atualização' />
-            </div>
+
           </FilterField>
           <Button size='small' label='filtrar' icon='pi pi-search' onClick={() => handleFilter()} />
           <Button size='small' label='limpar' outlined onClick={() => clearFilterForm()} />
