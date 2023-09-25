@@ -23,6 +23,13 @@ namespace FCxLabs.Api.Appliations.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(UserRequestDto userRequest)
+        {
+            await _service.CreateUser(userRequest);
+            return Ok();
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUserById(int id, UserUpdateRequestDto user)
         {

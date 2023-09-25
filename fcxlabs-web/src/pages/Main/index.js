@@ -1,79 +1,60 @@
-import { useEffect, useState } from 'react';
-import { Container, Control, DatatableArea, FilterField } from './styles'
-import { getAllByFilter } from '../../services/UserService';
+import { useEffect, useState, useRef } from 'react';
+import { Container, Control, DatatableArea } from './styles'
+import { getAllByFilter, blockerById, inactiveUserById } from '../../services/UserService';
 import { useNavigate } from 'react-router-dom';
 import { PrimeReactProvider } from 'primereact/api';
 import { Button } from 'primereact/button';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { Dialog } from 'primereact/dialog';
 import { Paginator } from 'primereact/paginator';
 import { Tag } from 'primereact/tag';
-import { InputText } from 'primereact/inputtext';
-import { Card } from 'primereact/card';
-import { Dropdown } from 'primereact/dropdown';
+import ConfirmModel from '../../Components/ConfirmModel';
+import Filter from '../../Components/Filter';
+import FormModel from '../../Components/FormModel'
 
 export default function Main() {
 
   const navigate = useNavigate();
+  const ref = useRef(null);
 
-  const [visible, setVisible] = useState(false);
+  const [showFormDialog, setShowFormDialog] = useState(false);
+  const [showBlockDialog, setShowBlockDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [size, setSize] = useState(null);
   const [first, setFirst] = useState(1);
+  const [size, setSize] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showFilterCard, setShowFilterCard] = useState(false);
 
-  const [status, setStatus] = useState('');
-  const [name, setName] = useState('');
-  const [cpf, setCpf] = useState('');
-  const [username, setUsername] = useState('');
-  const [createdAt, setCreatedAt] = useState('');
-  const [updatedAt, setUpdatedAt] = useState('');
-  const [rangeAge, setRangeAge] = useState('');
-
-  const statusOptions = ['Inativo', 'Ativo', 'Bloqueado']
-  const rangeAgeOptions = [
-    'Maior que 18 e menor que 26',
-    'Maior que 25 e menor que 31',
-    'Maior que 30 e menor que 36',
-    'Maior que 35 e menor que 41'
-  ]
-
-  const statusToFilter = new Map()
-  statusToFilter.set('Inativo', 0)
-  statusToFilter.set('Ativo', 1)
-  statusToFilter.set('Bloqueado', 2)
+  const [filter, setFilter] = useState('')
 
   useEffect(() => {
+    getAllUserByFilter(1, '');
+  }, []);
 
-    getAllUserByFilter()
-  }, [first])
+  const getAllUserByFilter = (first, filter) => {
 
-  function getAllUserByFilter() {
+    setLoading(true);
+    setFirst(first)
 
-    setLoading(true)
-    const filter = buildFilterPath()
-    getAllByFilter(filter)
-      .then(response => response.json())
-      .then(data => {
-        setUsers(data.result)
-        setSize(data.size)
-        setLoading(false)
-      })
-  }
+    let path = `first=${first}&perPage=${10}`;
+    path = path.concat('', filter)
 
-  const buildFilterPath = () => {
-    let filter = `first=${first}&perPage=${10}`;
-    if (status) {
-      filter = filter.concat('', `&status=${statusToFilter.get(status)}`)
-    }
-    return filter;
-  }
-
-  function formatDate(date) {
-    return new Date(date).toLocaleDateString('pt-BR', { month: 'short', day: '2-digit', year: 'numeric' });
+    getAllByFilter(path)
+      .then(response => {
+        if (response.status === 401) {
+          localStorage.removeItem('fcxlabs-token')
+          navigate('/')
+        } else {
+          response.json().then(data => {
+            setUsers(data.result);
+            setSize(data.size);
+            setLoading(false);
+          });
+        }
+      });
   }
 
   const statusBodyTemplate = (rowData) => {
@@ -92,28 +73,40 @@ export default function Main() {
   };
 
   const showHiddenFilterCard = () => {
-    setShowFilterCard(!showFilterCard)
+    setShowFilterCard(!showFilterCard);
+  }
+
+  const handleClickUpdate = (value) => {
+    setSelectedUser(value);
+    ref.current.updateUser(value);
   }
 
   const dateBodyTemplate = (rowData) => {
-    return formatDate(rowData.createdAt);
+    return new Date(rowData.createdAt).toLocaleDateString('pt-BR', { month: 'short', day: '2-digit', year: 'numeric' })
   };
 
   const onPageChange = (e) => {
-    setFirst(e.first)
-    getAllUserByFilter()
+    setFirst(e.first);
+    getAllUserByFilter(e.first, filter);
   }
 
-  const filterUsers = () => {
-    getAllUserByFilter();
+  const filterUsers = (value) => {
+    setFilter(value)
+    getAllUserByFilter(first, value);
   }
 
-  const clearFilterForm = () => {
-    setName('')
-    setCpf('')
-    setUsername('')
-    setStatus('')
-    setRangeAge('')
+  const actionConfirmBlock = (confirm) => {
+    setShowBlockDialog(false);
+    if (confirm) {
+      blockerById(selectedUser.id).then(_ => getAllUserByFilter());
+    }
+  }
+
+  const actionConfirmDelete = (confirm) => {
+    setShowDeleteDialog(false);
+    if (confirm) {
+      inactiveUserById(selectedUser.id).then(_ => getAllUserByFilter());
+    }
   }
 
   return (
@@ -121,41 +114,28 @@ export default function Main() {
       <Container>
         <Control>
           <Button icon='pi pi-search' severity='primary' outlined onClick={() => showHiddenFilterCard()} />
-          <Button size='small' label='Inserir um novo' icon='pi pi-user-plus' onClick={() => setVisible(true)} />
-          <Button size='small' severity='secondary' disabled={!selectedUser} label='alterar' icon='pi pi-pencil' onClick={() => setVisible(true)} />
-          <Button icon='pi pi-lock' severity='warning' disabled={!selectedUser} tooltip='bloquear' tooltipOptions={{ position: 'bottom' }} />
-          <Button icon='pi pi-times' severity='danger' disabled={!selectedUser} tooltip='excluir' tooltipOptions={{ position: 'bottom' }} />
-        </Control>
-        {showFilterCard && (
-          <Card>
-            <p>filtro</p>
-            <FilterField>
-              <div>
-                <InputText onChange={e => setName(e.target.value)} placeholder='nome' />
-                <InputText placeholder='cpf' />
-              </div>
-              <div>
-                <InputText placeholder='username' />
-                <Dropdown value={status} options={statusOptions} onChange={e => setStatus(e.value)} placeholder='status' />
-              </div>
-              <div>
-                <InputText type='date' placeholder='data de nascimento' />
-                <Dropdown value={rangeAge} options={rangeAgeOptions} onChange={e => setRangeAge(e.value)} placeholder='faixa etária' />
-              </div>
-              <div>
-                <InputText type='date' placeholder='criado em' />
-                <InputText type='date' placeholder='ultima atualização' />
-              </div>
-            </FilterField>
-            <Button size='small' label='filtrar' icon='pi pi-search' onClick={() => filterUsers()} />
-            <Button size='small' label='limpar' outlined onClick={() => clearFilterForm()} />
-          </Card>
-        )}
 
+          <Button size='small' severity='primary' label='Inserir um novo' icon='pi pi-user-plus'
+            onClick={() => setShowFormDialog(true)} />
+
+          <Button size='small' severity='primary' disabled={!selectedUser} label='alterar' icon='pi pi-pencil'
+            onClick={() => setShowFormDialog(true)} />
+
+          <Button icon='pi pi-lock' severity='warning' disabled={!selectedUser} tooltip='bloquear'
+            onClick={() => setShowBlockDialog(true)} tooltipOptions={{ position: 'bottom' }} />
+
+          <Button icon='pi pi-times' severity='danger' disabled={!selectedUser} tooltip='excluir'
+            onClick={() => setShowDeleteDialog(true)} tooltipOptions={{ position: 'bottom' }} />
+
+        </Control>
+
+        <Filter visible={showFilterCard} filterUsers={filterUsers} />
 
         <DatatableArea>
           <DataTable value={users} size={'small'} scrollable loading={loading}
-            selectionMode='single' selection={selectedUser} onSelectionChange={(e) => setSelectedUser(e.value)} dataKey='id' metaKeySelection={false}>
+            selectionMode='single' selection={selectedUser}
+            onSelectionChange={(e) => handleClickUpdate(e.value)}
+            dataKey='id' metaKeySelection={false}>
             <Column field='name' header='nome' style={{ minWidth: '150px' }} />
             <Column field='username' header='login' style={{ minWidth: '200px' }} />
             <Column field='email' header='e-mail' style={{ minWidth: '200px' }} />
@@ -172,14 +152,18 @@ export default function Main() {
         </DatatableArea>
       </Container>
 
-      <Dialog header='Header' visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
-        <p className='m-0'>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-      </Dialog>
+      <FormModel ref={ref} visible={showFormDialog} userToUpdate={selectedUser} hide={() => setShowFormDialog(false)} />
+
+      <ConfirmModel visible={showBlockDialog}
+        action={actionConfirmBlock}
+        messageHeader={'Confirme, Por favor!'}
+        messageBody={'Você tem certeza que deseja BLOQUEAR este usuário?'} />
+
+      <ConfirmModel visible={showDeleteDialog}
+        action={actionConfirmDelete}
+        messageHeader={'Confirme, Por favor!'}
+        messageBody={'Você tem certeza que deseja EXCLUIR este usuário?'} />
+
     </PrimeReactProvider>
   )
 }

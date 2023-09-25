@@ -61,6 +61,8 @@ namespace FCxLabs.Api.Data
 
             AddPagination(filter, ref query);
 
+            query = query.OrderByDescending(x => x.CreatedAt);
+
             return await query.ToListAsync();
         }
 
@@ -100,19 +102,19 @@ namespace FCxLabs.Api.Data
         private static void AddUsernameToFilter(FilterRequestDto filter, ref IQueryable<User> query)
         {
             if (!string.IsNullOrEmpty(filter.Username))
-                query = query.Where(u => u.Username == filter.Username);
+                query = query.Where(u => u.Username.ToUpper().Contains(filter.Username.ToUpper()));
         }
 
         private static void AddNameToFilter(FilterRequestDto filter, ref IQueryable<User> query)
         {
             if (!string.IsNullOrEmpty(filter.Name))
-                query = query.Where(u => u.Name == filter.Name);
+                query = query.Where(u => u.Name.ToUpper().Contains(filter.Name.ToUpper()));
         }
 
         private static void AddCPFToFilter(FilterRequestDto filter, ref IQueryable<User> query)
         {
             if (!string.IsNullOrEmpty(filter.CPF))
-                query = query.Where(u => u.CPF == filter.CPF);
+                query = query.Where(u => u.CPF.Contains(filter.CPF));
         }
 
         private static void AddStatusToFilter(FilterRequestDto filter, ref IQueryable<User> query)

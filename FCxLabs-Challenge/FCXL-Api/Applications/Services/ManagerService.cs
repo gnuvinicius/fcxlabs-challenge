@@ -6,11 +6,13 @@ namespace FCxLabs.Api.Applications.Services
 {
     public class ManagerService : IManagerService
     {
+        private readonly IAuthService _authService;
         private readonly IUserRepository _repository;
         private readonly IMapper _mapper;
 
-        public ManagerService(IUserRepository repository, IMapper mapper)
+        public ManagerService(IUserRepository repository, IAuthService authService, IMapper mapper)
         {
+            _authService = authService;
             _repository = repository;
             _mapper = mapper;
         }
@@ -18,6 +20,11 @@ namespace FCxLabs.Api.Applications.Services
         public async Task BlockUserById(int id)
         {
             await _repository.BlockUserById(id);
+        }
+
+        public async Task CreateUser(UserRequestDto userRequest)
+        {
+            await _authService.CreateUser(userRequest);
         }
 
         public async Task DeleteUserById(int id)

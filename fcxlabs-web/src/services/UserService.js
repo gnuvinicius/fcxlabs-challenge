@@ -10,8 +10,12 @@ export function getAllByFilter(filter) {
     return fetch(`${API_PATH}/get-all-by-filter?${filter}`, { method: 'GET', headers: headers })
 }
 
-export function updateById(id) {
-    return fetch(`${API_PATH}?id=${id}`, { method: 'PUT', headers: headers })
+export function createUser(userRequest) {
+    return fetch(`${API_PATH}`, { method: 'POST', body: JSON.stringify(userRequest), headers: headers })
+}
+
+export function updateById(id, userRequest) {
+    return fetch(`${API_PATH}?id=${id}`, { method: 'PUT', body: JSON.stringify(userRequest), headers: headers })
 }
 
 export function inactiveUserById(id) {
@@ -19,5 +23,5 @@ export function inactiveUserById(id) {
 }
 
 export function blockerById(id) {
-    return fetch(`${API_PATH}/blocker-by-id?id=${id}`, { method: 'PATH', headers: headers })
+    return fetch(`${API_PATH}/blocker-by-id?id=${id}`, { method: 'PATCH', headers: headers })
 }

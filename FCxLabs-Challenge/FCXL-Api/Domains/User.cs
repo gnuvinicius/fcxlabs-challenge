@@ -31,7 +31,7 @@ public class User
         Birtday = dto.Birtday.ToUniversalTime();
         MotherName = dto.MotherName;
         CreatedAt = DateTime.Now;
-        UpdatedAt = null;
+        UpdatedAt = DateTime.Now;
     }
 
     public void BlockUser()
