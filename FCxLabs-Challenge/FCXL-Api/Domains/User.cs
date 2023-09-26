@@ -17,6 +17,8 @@ public class User
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; set; }
 
+    public User() { }
+
     public User(UserRequestDto dto, string password)
     {
         Username = dto.Username;
