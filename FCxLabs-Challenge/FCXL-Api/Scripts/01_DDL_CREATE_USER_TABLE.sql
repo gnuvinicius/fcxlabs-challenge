@@ -10,7 +10,7 @@ CREATE SEQUENCE IF NOT EXISTS public.tb_user_user_id_seq
     CACHE 1;
 
 ALTER SEQUENCE public.tb_user_user_id_seq
-    OWNER TO fcxlabsdbdev;
+    OWNER TO fcxlabs_db_dev;
 
 
 -- Table: public.tb_user
@@ -38,6 +38,6 @@ CREATE TABLE IF NOT EXISTS public.tb_user
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.tb_user
-    OWNER to fcxlabsdbdev;
+    OWNER to fcxlabs_db_dev;
 
-GRANT ALL ON TABLE public.tb_user TO fcxlabsdbdev;
+GRANT ALL ON TABLE public.tb_user TO fcxlabs_db_dev;
