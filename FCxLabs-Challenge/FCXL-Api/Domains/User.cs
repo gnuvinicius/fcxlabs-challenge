@@ -5,14 +5,14 @@ namespace FCxLabs.Api.Domains;
 public class User
 {
     public int Id { get; private set; }
-    public string Name { get; private set; }
-    public string Username { get; private set; }
-    public string Password { get; private set; }
-    public string Email { get; private set; }
-    public string Phone { get; private set; }
-    public string CPF { get; private set; }
+    public string Name { get; private set; } = string.Empty;
+    public string Username { get; private set; } = string.Empty;
+    public string Password { get; private set; } = string.Empty;
+    public string Email { get; private set; } = string.Empty;
+    public string Phone { get; private set; } = string.Empty;
+    public string CPF { get; private set; } = string.Empty;
     public DateTime Birtday { get; private set; }
-    public string MotherName { get; private set; }
+    public string MotherName { get; private set; } = string.Empty;
     public Status Status { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; set; }
