@@ -9,10 +9,10 @@
 
         public Pagination(int first, int perPage, int size, List<UserResponseDto> result)
         {
-            this.First = first;
-            this.PerPage = perPage;
-            this.Size = size;
-            this.Result = result;
+            First = first;
+            PerPage = perPage;
+            Size = size;
+            Result = result;
         }
     }
 }

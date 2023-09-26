@@ -1,9 +1,7 @@
 ﻿using FCxLabs.Api.Applications.Dtos;
 using FCxLabs.Api.Applications.Services;
-using FCxLabs.Api.Domains;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Xml.Linq;
 
 namespace FCxLabs.Api.Applications.Controllers;
 

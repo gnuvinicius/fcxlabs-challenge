@@ -1,5 +1,4 @@
 ﻿using FCxLabs.Api.Applications.Dtos;
-using Humanizer;
 
 namespace FCxLabs.Api.Domains;
 
@@ -18,7 +17,6 @@ public class User
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; set; }
 
-    public User() { }
     public User(UserRequestDto dto, string password)
     {
         Username = dto.Username;
@@ -36,12 +34,12 @@ public class User
 
     public void BlockUser()
     {
-        this.Status = Status.Blocked;
+        Status = Status.Blocked;
     }
 
     internal void InactiveUser()
     {
-        this.Status = Status.Inactive;
+        Status = Status.Inactive;
     }
 
     internal void UpdateFields(UserUpdateRequestDto dto)

@@ -17,7 +17,7 @@ namespace FCxLabs.Api.Data
         {
             var user = await _context.Users
                 .FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception("user not found");
-            
+
             user.BlockUser();
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
@@ -90,7 +90,6 @@ namespace FCxLabs.Api.Data
             AddBirtdayToFilter(filter, ref query);
             AddCreatedAtToFilter(filter, ref query);
             AddUpdatedAtToFilter(filter, ref query);
-            AddRangeAgeToFilter(filter, ref query);
             return query;
         }
 
@@ -145,11 +144,6 @@ namespace FCxLabs.Api.Data
         {
             if (filter.UpdatedAt != null)
                 query = query.Where(u => u.UpdatedAt == filter.UpdatedAt);
-        }
-
-        private static void AddRangeAgeToFilter(FilterRequestDto filter, ref IQueryable<User> query)
-        {
-
         }
 
         #endregion
