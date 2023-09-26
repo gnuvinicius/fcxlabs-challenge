@@ -13,7 +13,7 @@ o PgAdmin4 para administrar o banco e o frontend rodando com o package serve no 
 
 ### devOps helpers
 
-Para executar o ambiente de teste, é preciso alterar o endereço IP 172.23.239.162 para o endereço que vai rodar os serviços (sugiro, pelo vscode, buscar no codigo onde está preenchido esse IP, são os arquivos **appsettings.json** e **.env**), acessar o PgAdmin4 pela porta 16543, adicionar o servidor (hostname: **db**, port: **5432**, database: **fcxlabs_db**, user: **fcxlabs_db_dev** e password: **Password** ), e rodar os dois scripts da pasta Scripts 01_DDL e 02_DML.
+Para executar o ambiente de teste, é preciso alterar o endereço IP 172.23.239.162 para o endereço que vai rodar os serviços (sugiro, pelo vscode, buscar no codigo onde está preenchido esse IP, são os arquivos **appsettings.json** e **.env**), acessar o PgAdmin4 pela porta 16543, adicionar o servidor (hostname: **db**, port: **5432**, database: **fcxlabs_db**, user: **fcxlabs_db_dev** e password: **Password** ), e rodar os dois scripts da pasta Scripts: **01_DDL_CREATE_USER_TABLE.sql** e **02_DML_INSERT_USERS.sql**.
 
 todos os usuarios estão com a mesma senha: **password123**
 
